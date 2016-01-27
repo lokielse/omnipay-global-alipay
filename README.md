@@ -71,7 +71,7 @@ $response = $gateway->purchase($params)->send();
 //$response->redirect();
 var_dump($response->getRedirectUrl());
 var_dump($response->getRedirectData());
-var_dump($response->getOrderString());
+var_dump($response->getOrderString()); //for GlobalAlipay_App
 
 ```
 

@@ -107,6 +107,7 @@ repository.
 ## Related
 
 - [Laravel-Omnipay](https://github.com/ignited/laravel-omnipay)
+- [Omnipay-Alipay](https://github.com/lokielse/omnipay-alipay)
 - [Omnipay-WechatPay](https://github.com/lokielse/omnipay-wechatpay)
 - [Omnipay-UnionPay](https://github.com/lokielse/omnipay-unionpay)
 

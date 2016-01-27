@@ -21,10 +21,8 @@ class WebPurchaseRequest extends AbstractRequest
             'key',
             'partner',
             'notify_url',
-            'sign_type',
             'subject',
             'out_trade_no',
-            'currency',
             'total_fee'
         );
 
@@ -33,12 +31,12 @@ class WebPurchaseRequest extends AbstractRequest
             'partner'               => $this->getPartner(),
             'notify_url'            => $this->getNotifyUrl(),
             'return_url'            => $this->getReturnUrl(),//<>
-            'sign_type'             => $this->getSignType(),
+            'sign_type'             => $this->getSignType() ?: 'MD5',
             'subject'               => $this->getSubject(),
             '_input_charset'        => $this->getInputCharset() ?: 'UTF-8',//<>
             'body'                  => $this->getBody(),//<>
             'out_trade_no'          => $this->getOutTradeNo(),
-            'currency'              => $this->getCurrency(),
+            'currency'              => $this->getCurrency() ?: 'USD',
             'total_fee'             => $this->getTotalFee(),
             'rmb_fee'               => $this->getRmbFee(),//<>
             'supplier'              => $this->getSupplier(),//<>

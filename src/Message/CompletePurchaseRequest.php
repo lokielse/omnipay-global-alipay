@@ -49,6 +49,18 @@ class CompletePurchaseRequest extends AbstractRequest
     }
 
 
+    public function getPrivateKey()
+    {
+        return $this->getParameter('private_key');
+    }
+
+
+    public function setPrivateKey($value)
+    {
+        return $this->setParameter('private_key', $value);
+    }
+
+
     public function getPartner()
     {
         return $this->getParameter('partner');
@@ -92,7 +104,9 @@ class CompletePurchaseRequest extends AbstractRequest
     {
         $data = $this->getRequestParams();
 
-        $sign = Helper::sign($data, $this->getRequestParam('sign_type'), $this->getKey());
+        $signType = strtoupper($this->getRequestParam('sign_type'));
+
+        $sign = Helper::sign($data, $signType, $this->getSignKey($signType));
 
         $responseData = array ();
 
@@ -109,5 +123,20 @@ class CompletePurchaseRequest extends AbstractRequest
         }
 
         return $this->response = new CompletePurchaseResponse($this, $responseData);
+    }
+
+
+    /**
+     * @param $signType
+     *
+     * @return mixed
+     */
+    protected function getSignKey($signType)
+    {
+        if ($signType == 'MD5') {
+            return $this->getKey();
+        } else {
+            return $this->getPrivateKey();
+        }
     }
 }

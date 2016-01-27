@@ -52,7 +52,7 @@ class Helper
     }
 
 
-    protected function prefixCertificateKeyPath($key)
+    protected static function prefixCertificateKeyPath($key)
     {
         if (strtoupper(substr(PHP_OS, 0, 3)) != 'WIN' && is_file($key) && substr($key, 0, 7) != 'file://') {
             $key = 'file://' . $key;

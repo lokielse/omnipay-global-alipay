@@ -1,4 +1,4 @@
-# Omnipay: Alipay
+# Omnipay: Alipay (Global)
 
 **Alipay driver for the Omnipay PHP payment processing library**
 

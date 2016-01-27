@@ -26,6 +26,14 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
 
+    public function isNotifyIdVerifyOk()
+    {
+        $data = $this->getData();
+
+        return $data['notify_id_verify_ok'];
+    }
+
+
     public function isPaid()
     {
         $data = $this->getData();

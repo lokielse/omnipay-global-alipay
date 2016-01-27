@@ -2,16 +2,16 @@
 
 namespace Omnipay\GlobalAlipay;
 
-use Omnipay\GlobalAlipay\Message\AppPurchaseResponse;
 use Omnipay\GlobalAlipay\Message\CompletePurchaseResponse;
+use Omnipay\GlobalAlipay\Message\WebPurchaseResponse;
 use Omnipay\Omnipay;
 use Omnipay\Tests\GatewayTestCase;
 
-class AppGatewayTest extends GatewayTestCase
+class WapGatewayTest extends GatewayTestCase
 {
 
     /**
-     * @var AppGateway $gateway
+     * @var WapGateway $gateway
      */
     protected $gateway;
 
@@ -22,10 +22,10 @@ class AppGatewayTest extends GatewayTestCase
     {
         parent::setUp();
 
-        $this->gateway = Omnipay::create('GlobalAlipay_App');
+        $this->gateway = Omnipay::create('GlobalAlipay_Wap');
         $this->gateway->setPartner('123456');
-        $this->gateway->setSellerId('foo@example.com');
-        $this->gateway->setPrivateKey(__DIR__ . '/Assets/private_key.pem');
+        $this->gateway->setKey('xxxxxxx');
+        $this->gateway->setSignType('MD5');
         $this->gateway->setNotifyUrl('http://example.com/notify');
 
     }
@@ -34,19 +34,18 @@ class AppGatewayTest extends GatewayTestCase
     public function testPurchase()
     {
         $order = array (
-            'subject'      => 'test', //Your title
-            'out_trade_no' => date('YmdHis'), //Should be format 'YmdHis'
-            'total_fee'    => '0.01', //Order Title
-            'body'         => 'descccccc', //Order Title
+            'subject'      => 'test', //Your subject
+            'out_trade_no' => date('YmdHis'), //trade no
+            'total_fee'    => '0.01', //order fee
         );
 
         /**
-         * @var AppPurchaseResponse $response
+         * @var WebPurchaseResponse $response
          */
         $response = $this->gateway->purchase($order)->send();
         $this->assertTrue($response->isSuccessful());
-        $this->assertFalse($response->isRedirect());
-        $this->assertNotEmpty($response->getOrderString());
+        $this->assertTrue($response->isRedirect());
+        $this->assertNotEmpty($response->getRedirectData());
     }
 
 
@@ -56,7 +55,7 @@ class AppGatewayTest extends GatewayTestCase
             'request_params' => array (
                 'out_trade_no' => '123456',
                 'sign'         => '123456',
-                'sign_type'    => 'RSA',
+                'sign_type'    => 'MD5',
             ),
         );
 

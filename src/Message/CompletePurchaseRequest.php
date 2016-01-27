@@ -2,12 +2,18 @@
 
 namespace Omnipay\GlobalAlipay\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\GlobalAlipay\Helper;
 
 class CompletePurchaseRequest extends AbstractRequest
 {
+
+    protected $endpoint = 'http://notify.alipay.com/trade/notify_query.do?';
+
+    protected $endpointHttps = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
+
 
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
@@ -17,11 +23,37 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
+        $this->validateParam('sign_type', 'sign', 'out_trade_no');
+
+        $transport = strtolower($this->getTransport() ?: 'http');
+        $signType  = $this->getRequestParam('sign_type');
+
+        if ($transport == 'https') {
+            $this->validate('ca_cert_path');
+        }
+
+        if ($signType == 'MD5') {
+            $this->validate('key');
+        } else {
+            $this->validate('private_key');
+        }
+
         $data = array (
             'request_params' => $this->getRequestParams()
         );
 
         return $data;
+    }
+
+
+    public function validateParam()
+    {
+        foreach (func_get_args() as $key) {
+            $value = $this->getRequestParam($key);
+            if (empty($value)) {
+                throw new InvalidRequestException("The $key of request_params is required");
+            }
+        }
     }
 
 
@@ -85,6 +117,30 @@ class CompletePurchaseRequest extends AbstractRequest
     }
 
 
+    public function getTransport()
+    {
+        return $this->getParameter('transport');
+    }
+
+
+    public function setTransport($value)
+    {
+        return $this->setParameter('transport', $value);
+    }
+
+
+    public function getCaCertPath()
+    {
+        return $this->getParameter('ca_cert_path');
+    }
+
+
+    public function setCaCertPath($value)
+    {
+        return $this->setParameter('ca_cert_path', $value);
+    }
+
+
     protected function getRequestParam($key)
     {
         $params = $this->getRequestParams();
@@ -108,21 +164,93 @@ class CompletePurchaseRequest extends AbstractRequest
 
         $sign = Helper::sign($data, $signType, $this->getSignKey($signType));
 
-        $responseData = array ();
+        $notifyId = $this->getRequestParam('notify_id');
 
+        /**
+         * is sign match?
+         */
         if (isset($data['sign']) && $data['sign'] && $sign === $data['sign']) {
-            $responseData['sign_match'] = true;
+            $signMatch = true;
         } else {
-            $responseData['sign_match'] = false;
+            $signMatch = false;
         }
 
-        if ($responseData['sign_match'] && isset($data['trade_status']) && $data['trade_status'] == 'TRADE_FINISHED') {
-            $responseData['paid'] = true;
+        /**
+         * Verify through Alipay server if exists notify_id
+         */
+        if ($notifyId) {
+            $verifyResponse = $this->getVerifyResponse($notifyId);
+            $verifyOk       = $this->isNotifyVerifiedOK($verifyResponse);
         } else {
-            $responseData['paid'] = false;
+            $verifyOk = true;
         }
+
+        /**
+         * is paid?
+         */
+        if ($signMatch && $verifyOk && isset($data['trade_status']) && $data['trade_status'] == 'TRADE_FINISHED') {
+            $paid = true;
+        } else {
+            $paid = false;
+        }
+
+        $responseData = array (
+            'sign_match'          => $signMatch,
+            'notify_id_verify_ok' => $verifyOk,
+            'paid'                => $paid,
+        );
 
         return $this->response = new CompletePurchaseResponse($this, $responseData);
+    }
+
+
+    protected function isNotifyVerifiedOK($verifyResponse)
+    {
+        if (preg_match("/true$/i", $verifyResponse)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    private function getVerifyResponse($notifyId)
+    {
+        $partner  = $this->getPartner();
+        $endpoint = $this->getEndpoint();
+
+        $url = "{$endpoint}partner={$partner}&notify_id={$notifyId}";
+
+        $response = $this->getHttpResponseGET($url, $this->getCacertPath());
+
+        return $response;
+    }
+
+
+    private function getHttpResponseGET($url, $caCertUrl)
+    {
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl, CURLOPT_CAINFO, $caCertUrl);
+        $responseText = curl_exec($curl);
+        curl_close($curl);
+
+        return $responseText;
+    }
+
+
+    private function getEndpoint()
+    {
+        $transport = strtolower($this->getTransport() ?: 'http');
+
+        if (strtolower($transport) == 'http') {
+            return $this->endpoint;
+        } else {
+            return $this->endpointHttps;
+        }
     }
 
 

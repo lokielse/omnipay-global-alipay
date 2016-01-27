@@ -2,14 +2,14 @@
 
 **Alipay driver for the Omnipay PHP payment processing library**
 
-[![Build Status](https://travis-ci.org/lokielse/omnipay-alipay.png?branch=master)](https://travis-ci.org/lokielse/omnipay-alipay)
-[![Latest Stable Version](https://poser.pugx.org/lokielse/omnipay-alipay/version.png)](https://packagist.org/packages/lokielse/omnipay-alipay)
-[![Total Downloads](https://poser.pugx.org/lokielse/omnipay-alipay/d/total.png)](https://packagist.org/packages/lokielse/omnipay-alipay)
+[![Build Status](https://travis-ci.org/lokielse/omnipay-global-alipay.png?branch=master)](https://travis-ci.org/lokielse/omnipay-global-alipay)
+[![Latest Stable Version](https://poser.pugx.org/lokielse/omnipay-global-alipay/version.png)](https://packagist.org/packages/lokielse/omnipay-global-alipay)
+[![Total Downloads](https://poser.pugx.org/lokielse/omnipay-global-alipay/d/total.png)](https://packagist.org/packages/lokielse/omnipay-global-alipay)
 
 [Omnipay](https://github.com/omnipay/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 5.3+. This package implements Alipay support for Omnipay.
 
-> This package does not support international Alipay service
+> This package only support global Alipay service
 
 ## Installation
 
@@ -18,7 +18,7 @@ Omnipay is installed via [Composer](http://getcomposer.org/). To install, simply
 ```json
 {
     "require": {
-        "lokielse/omnipay-alipay": "dev-master"
+        "lokielse/omnipay-global-alipay": "dev-master"
     }
 }
 ```
@@ -33,55 +33,56 @@ And run composer to update your dependencies:
 The following gateways are provided by this package:
 
 
-* Alipay_Express (Alipay Express Checkout) 支付宝即时到账接口
-* Alipay_Secured (Alipay Secured Checkout) 支付宝担保交易接口
-* Alipay_Dual (Alipay Dual Function Checkout) 支付宝双功能交易接口
-* Alipay_WapExpress (Alipay Wap Express Checkout) 支付宝WAP客户端接口
-* Alipay_MobileExpress (Alipay Mobile Express Checkout) 支付宝无线支付接口
-* Alipay_Bank (Alipay Bank Checkout) 支付宝网银快捷接口
+* GlobalAlipay_Web (Alipay Global Web Gateway) 支付宝国际版Web支付宝接口
 
 ## Usage
 
+### Sandbox Test Account
+
+Please visit [Sandbox Test Account](SANDBOX.md)
+
 ### Purchase
 ```php
-$gateway = Omnipay::create('Alipay_Express');
+/**
+ * @var Omnipay\GlobalAlipay\WebGateway $gateway
+ */
+$gateway = Omnipay::create('GlobalAlipay');
 $gateway->setPartner('8888666622221111');
 $gateway->setKey('your**key**here');
-$gateway->setSellerEmail('merchant@example.com');
 $gateway->setReturnUrl('http://www.example.com/return');
 $gateway->setNotifyUrl('http://www.example.com/notify');
+$gateway->setEnvironment('sandbox'); //for Sandbox Test
 
-//For 'Alipay_MobileExpress', 'Alipay_WapExpress'
-//$gateway->setPrivateKey('/such-as/private_key.pem');
-
-$options = [
+$params = [
     'out_trade_no' => date('YmdHis') . mt_rand(1000,9999), //your site trade no, unique
     'subject'      => 'test', //order title
     'total_fee'    => '0.01', //order total fee
+    'currency'     => 'USD', //default is 'USD'
 ];
 
+/**
+ * @var Omnipay\GlobalAlipay\Message\WebPurchaseResponse $response
+ */
 $response = $gateway->purchase($options)->send();
 
+$response->redirect();
 $response->getRedirectUrl();
 $response->getRedirectData();
 
-//For 'Alipay_MobileExpress'
-//Use the order string with iOS or Android SDK
-$response->getOrderString();
 ```
 
 ### Return/Notify
 ```php
-$gateway = Omnipay::create('Alipay_Express');
+/**
+ * @var Omnipay\GlobalAlipay\WebGateway $gateway
+ */
+$gateway = Omnipay::create('GlobalAlipay');
 $gateway->setPartner('8888666622221111');
 $gateway->setKey('your**key**here');
-$gateway->setSellerEmail('merchant@example.com');
+$gateway->setEnvironment('sandbox'); //for Sandbox Test
 
-//For 'Alipay_MobileExpress', 'Alipay_WapExpress'
-//$gateway->setAlipayPublicKey('/such-as/alipay_public_key.pem');
-
-$options = [
-    'request_params'=> array_merge($_POST, $_GET), //Don't use $_REQUEST for may contain $_COOKIE
+$params = [
+    'request_params' => array_merge($_GET, $_POST), //Don't use $_REQUEST for may contain $_COOKIE
 ];
 
 $response = $gateway->completePurchase($options)->send();

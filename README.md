@@ -38,7 +38,6 @@ The following gateways are provided by this package:
 
 
 * Sandbox information: [SANDBOX.md](SANDBOX.md)
-
 * Documentation: [Alipay Global Guid](https://ds.alipay.com/fd-ij9mtflt/home.html)
 
 ### Purchase

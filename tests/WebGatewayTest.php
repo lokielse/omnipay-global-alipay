@@ -34,9 +34,9 @@ class WebGatewayTest extends GatewayTestCase
     public function testPurchase()
     {
         $order = array (
-            'subject'      => 'test', //Your order ID
-            'out_trade_no' => date('YmdHis'), //Should be format 'YmdHis'
-            'total_fee'    => '0.01', //Order Title
+            'subject'      => 'test', //Your subject
+            'out_trade_no' => date('YmdHis'), //trade no
+            'total_fee'    => '0.01', //order fee
         );
 
         /**

@@ -14,6 +14,12 @@ class CompletePurchaseResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
+        return $this->isPaid();
+    }
+
+
+    public function isSignMatch()
+    {
         $data = $this->getData();
 
         return $data['sign_match'];

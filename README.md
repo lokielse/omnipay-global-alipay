@@ -46,7 +46,7 @@ Please visit [Sandbox Test Account](SANDBOX.md)
 /**
  * @var Omnipay\GlobalAlipay\WebGateway $gateway
  */
-$gateway = Omnipay::create('GlobalAlipay');
+$gateway = Omnipay::create('GlobalAlipay_Web');
 $gateway->setPartner('8888666622221111');
 $gateway->setKey('your**key**here');
 $gateway->setReturnUrl('http://www.example.com/return');
@@ -76,7 +76,7 @@ $response->getRedirectData();
 /**
  * @var Omnipay\GlobalAlipay\WebGateway $gateway
  */
-$gateway = Omnipay::create('GlobalAlipay');
+$gateway = Omnipay::create('GlobalAlipay_Web');
 $gateway->setPartner('8888666622221111');
 $gateway->setKey('your**key**here');
 $gateway->setEnvironment('sandbox'); //for Sandbox Test

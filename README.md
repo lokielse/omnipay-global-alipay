@@ -62,7 +62,7 @@ $params = [
 /**
  * @var Omnipay\GlobalAlipay\Message\WebPurchaseResponse $response
  */
-$response = $gateway->purchase($options)->send();
+$response = $gateway->purchase($params)->send();
 
 $response->redirect();
 $response->getRedirectUrl();
@@ -84,7 +84,7 @@ $params = [
     'request_params' => array_merge($_GET, $_POST), //Don't use $_REQUEST for may contain $_COOKIE
 ];
 
-$response = $gateway->completePurchase($options)->send();
+$response = $gateway->completePurchase($params)->send();
 
 /**
  * @var Omnipay\GlobalAlipay\Message\CompletePurchaseResponse $response

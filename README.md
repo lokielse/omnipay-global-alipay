@@ -86,6 +86,9 @@ $params = [
 
 $response = $gateway->completePurchase($options)->send();
 
+/**
+ * @var Omnipay\GlobalAlipay\Message\CompletePurchaseResponse $response
+ */
 if ($response->isPaid()) {
 
    // Paid success, your statements go here.

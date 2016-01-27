@@ -78,8 +78,8 @@ $response->getRedirectData();
 $gateway = Omnipay::create('GlobalAlipay_App');
 $gateway->setPartner('123456');
 $gateway->setSellerId('foo@example.com');
-$gateway->setPrivateKey($privateKeyPathOrData);
 $gateway->setNotifyUrl('http://example.com/notify');
+$gateway->setPrivateKey($privateKeyPathOrData); //RSA private key is required
 
 $params = [
     'out_trade_no' => date('YmdHis') . mt_rand(1000,9999), //your site trade no, unique

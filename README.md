@@ -33,6 +33,8 @@ And run composer to update your dependencies:
 The following gateways are provided by this package:
 
 * GlobalAlipay_Web (Alipay Global Web Gateway) 支付宝国际版Web支付宝接口
+* GlobalAlipay_Wap (Alipay Global Wap Gateway) 支付宝国际版Wap支付宝接口
+* GlobalAlipay_App (Alipay Global App Gateway) 支付宝国际版App支付宝接口
 
 ## Usage
 
@@ -40,17 +42,19 @@ The following gateways are provided by this package:
 * Sandbox information: [SANDBOX.md](SANDBOX.md)
 * Documentation: [Alipay Global Guid](https://ds.alipay.com/fd-ij9mtflt/home.html)
 
-### Web Purchase
+### Purchase
 ```php
 /**
  * @var Omnipay\GlobalAlipay\WebGateway $gateway
  */
+//gateways: GlobalAlipay_Web, GlobalAlipay_Wap, GlobalAlipay_App
 $gateway = Omnipay::create('GlobalAlipay_Web');
 $gateway->setPartner('8888666622221111');
-$gateway->setKey('your**key**here');
+$gateway->setKey('your**key**here'); //for sign_type=MD5
+$gateway->setPrivateKey($privateKeyPathOrData); //for sign_type=RSA
 $gateway->setReturnUrl('http://www.example.com/return');
 $gateway->setNotifyUrl('http://www.example.com/notify');
-$gateway->setEnvironment('sandbox'); //for Sandbox Test
+$gateway->setEnvironment('sandbox'); //for Sandbox Test (Web/Wap)
 
 $params = [
     'out_trade_no' => date('YmdHis') . mt_rand(1000,9999), //your site trade no, unique
@@ -64,37 +68,11 @@ $params = [
  */
 $response = $gateway->purchase($params)->send();
 
-$response->redirect();
-$response->getRedirectUrl();
-$response->getRedirectData();
-
-```
-
-### App Purchase
-```php
-/**
- * @var Omnipay\GlobalAlipay\AppGateway $gateway
- */
-$gateway = Omnipay::create('GlobalAlipay_App');
-$gateway->setPartner('123456');
-$gateway->setSellerId('foo@example.com');
-$gateway->setNotifyUrl('http://example.com/notify');
-$gateway->setPrivateKey($privateKeyPathOrData); //RSA private key is required
-
-$params = [
-    'out_trade_no' => date('YmdHis') . mt_rand(1000,9999), //your site trade no, unique
-    'subject'      => 'test', //order title
-    'body'         => 'desc...', //order desc
-    'total_fee'    => '0.01', //order total fee
-    'currency'     => 'USD', //default is 'USD'
-];
-
-/**
- * @var Omnipay\GlobalAlipay\Message\AppPurchaseResponse $response
- */
-$response = $gateway->purchase($params)->send();
-
+//$response->redirect();
+var_dump($response->getRedirectUrl());
+var_dump($response->getRedirectData());
 var_dump($response->getOrderString());
+
 ```
 
 ### Return/Notify
@@ -104,8 +82,9 @@ var_dump($response->getOrderString());
  */
 $gateway = Omnipay::create('GlobalAlipay_Web');
 $gateway->setPartner('8888666622221111');
-$gateway->setKey('your**key**here');
-$gateway->setEnvironment('sandbox'); //for Sandbox Test
+$gateway->setKey('your**key**here'); //for sign_type=MD5
+$gateway->setPrivateKey($privateKeyPathOrData); //for sign_type=RSA
+$gateway->setEnvironment('sandbox'); //for Sandbox Test (Web/Wap)
 
 $params = [
     'request_params' => array_merge($_GET, $_POST), //Don't use $_REQUEST for may contain $_COOKIE

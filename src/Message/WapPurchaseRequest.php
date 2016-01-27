@@ -2,55 +2,64 @@
 
 namespace Omnipay\GlobalAlipay\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\GlobalAlipay\Helper;
 
-class WebPurchaseRequest extends AbstractRequest
+class WapPurchaseRequest extends AbstractRequest
 {
 
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
-     *
      * @return mixed
+     * @throws InvalidRequestException
      */
     public function getData()
     {
         $this->validate(
-            'key',
             'partner',
-            'notify_url',
-            'subject',
             'out_trade_no',
-            'total_fee'
+            'subject'
         );
 
+        $signType = strtoupper($this->getSignType() ?: 'MD5');
+
+        if ($signType == 'MD5') {
+            $this->validate('key');
+        } else {
+            $this->validate('private_key');
+        }
+
+        if ($this->getTotalFee() && $this->getRmbFee()) {
+            throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' parameter can not be provide together");
+        }
+
+        if (! $this->getTotalFee() && ! $this->getRmbFee()) {
+            throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' must be provide one of them");
+        }
+
         $data = array (
-            'service'               => 'create_forex_trade',
-            'partner'               => $this->getPartner(),
-            'notify_url'            => $this->getNotifyUrl(),
-            'return_url'            => $this->getReturnUrl(),//<>
-            'sign_type'             => $this->getSignType() ?: 'MD5',
-            'subject'               => $this->getSubject(),
-            '_input_charset'        => $this->getInputCharset() ?: 'utf-8',//<>
-            'body'                  => $this->getBody(),//<>
-            'out_trade_no'          => $this->getOutTradeNo(),
-            'currency'              => $this->getCurrency() ?: 'USD',
-            'total_fee'             => $this->getTotalFee(),
-            'rmb_fee'               => $this->getRmbFee(),//<>
-            'supplier'              => $this->getSupplier(),//<>
-            'order_gmt_create'      => $this->getOrderGmtCreate(),//<>
-            'order_valid_time'      => $this->getOrderValidTime(),//<>
-            'timeout_rule'          => $this->getTimeoutRule(),//<>
-            'specified_pay_channel' => $this->getSpecifiedPayChannel(),//<>
-            'seller_id'             => $this->getSellerId(),//<>
-            'seller_name'           => $this->getSellerIndustry(),//<>
+            'service'        => 'create_forex_trade_wap',
+            'partner'        => $this->getPartner(),
+            '_input_charset' => $this->getInputCharset() ?: 'utf-8',//<>
+            'sign_type'      => $signType,
+            'notify_url'     => $this->getNotifyUrl(),//<>
+            'return_url'     => $this->getReturnUrl(),//<>
+            'out_trade_no'   => $this->getOutTradeNo(),
+            'currency'       => $this->getCurrency() ?: 'USD',
+            'subject'        => $this->getSubject(),
+            'total_fee'      => $this->getTotalFee(),//<>
+            'rmb_fee'        => $this->getRmbFee(),//<>
+            'supplier'       => $this->getSupplier(),//<>
+            'timeout_rule'   => $this->getTimeoutRule(),//<>
+            'body'           => $this->getBody(),//<>
         );
 
         $data = array_filter($data);
 
-        $data['sign'] = Helper::sign($data, 'MD5', $this->getKey());
+        $data['sign'] = Helper::sign($data, $signType, $this->getSignKey($signType));
 
         return $data;
     }
@@ -67,7 +76,7 @@ class WebPurchaseRequest extends AbstractRequest
     {
         $responseData = array ();
 
-        return $this->response = new WebPurchaseResponse($this, $responseData);
+        return $this->response = new WapPurchaseResponse($this, $responseData);
     }
 
 
@@ -80,6 +89,18 @@ class WebPurchaseRequest extends AbstractRequest
     public function setKey($value)
     {
         return $this->setParameter('key', $value);
+    }
+
+
+    public function getPrivateKey()
+    {
+        return $this->getParameter('private_key');
+    }
+
+
+    public function setPrivateKey($value)
+    {
+        return $this->setParameter('private_key', $value);
     }
 
 
@@ -215,40 +236,6 @@ class WebPurchaseRequest extends AbstractRequest
     }
 
 
-    public function getOrderGmtCreate()
-    {
-        return $this->getParameter('order_gmt_create');
-    }
-
-
-    /**
-     * @param string $value YYYY-MM-DD HH:MM:SS
-     *
-     * @return AbstractRequest
-     */
-    public function setOrderGmtCreate($value)
-    {
-        return $this->setParameter('order_gmt_create', $value);
-    }
-
-
-    public function getOrderValidTime()
-    {
-        return $this->getParameter('order_valid_time');
-    }
-
-
-    /**
-     * @param int $value second (max=21600)
-     *
-     * @return AbstractRequest
-     */
-    public function setOrderValidTime($value)
-    {
-        return $this->setParameter('order_valid_time', $value);
-    }
-
-
     public function getTimeoutRule()
     {
         return $this->getParameter('timeout_rule');
@@ -266,54 +253,6 @@ class WebPurchaseRequest extends AbstractRequest
     }
 
 
-    public function getSpecifiedPayChannel()
-    {
-        return $this->getParameter('specified_pay_channel');
-    }
-
-
-    public function setSpecifiedPayChannel($value)
-    {
-        return $this->setParameter('specified_pay_channel', $value);
-    }
-
-
-    public function getSellerId()
-    {
-        return $this->getParameter('seller_id');
-    }
-
-
-    public function setSellerId($value)
-    {
-        return $this->setParameter('seller_id', $value);
-    }
-
-
-    public function getSellerName()
-    {
-        return $this->getParameter('seller_name');
-    }
-
-
-    public function setSellerName($value)
-    {
-        return $this->setParameter('seller_name', $value);
-    }
-
-
-    public function getSellerIndustry()
-    {
-        return $this->getParameter('seller_industry');
-    }
-
-
-    public function setSellerIndustry($value)
-    {
-        return $this->setParameter('seller_industry', $value);
-    }
-
-
     public function getEnvironment()
     {
         return $this->getParameter('environment');
@@ -323,5 +262,24 @@ class WebPurchaseRequest extends AbstractRequest
     public function setEnvironment($value)
     {
         return $this->setParameter('environment', $value);
+    }
+
+
+    /**
+     * @param $signType
+     *
+     * @return mixed
+     */
+    protected function getSignKey($signType)
+    {
+        if ($signType == 'MD5') {
+            $key = $this->getKey();
+
+            return $key;
+        } else {
+            $key = $this->getPrivateKey();
+
+            return $key;
+        }
     }
 }

@@ -55,6 +55,7 @@ class WebGatewayTest extends GatewayTestCase
             'request_params' => array (
                 'out_trade_no' => '123456',
                 'sign'         => '123456',
+                'sign_type'    => 'MD5',
             ),
         );
 

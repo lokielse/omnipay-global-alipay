@@ -32,14 +32,14 @@ And run composer to update your dependencies:
 
 The following gateways are provided by this package:
 
-
 * GlobalAlipay_Web (Alipay Global Web Gateway) 支付宝国际版Web支付宝接口
 
 ## Usage
 
-### Sandbox Test Account
 
-Please visit [Sandbox Test Account](SANDBOX.md)
+* Sandbox information: [SANDBOX.md](SANDBOX.md)
+
+* Documentation: [Alipay Global Guid](https://ds.alipay.com/fd-ij9mtflt/home.html)
 
 ### Purchase
 ```php

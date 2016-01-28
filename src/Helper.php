@@ -34,13 +34,13 @@ class Helper
     }
 
 
-    private static function signWithMD5($string, $key)
+    public static function signWithMD5($string, $key)
     {
         return md5($string . $key);
     }
 
 
-    private static function signWithRSA($data, $privateKey)
+    public static function signWithRSA($data, $privateKey)
     {
         $privateKey = self::prefixCertificateKeyPath($privateKey);
         $res        = openssl_pkey_get_private($privateKey);

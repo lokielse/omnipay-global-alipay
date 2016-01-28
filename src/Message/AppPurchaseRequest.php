@@ -50,8 +50,6 @@ class AppPurchaseRequest extends AbstractRequest
 
         $data = array_filter($data);
 
-        $data['sign'] = Helper::sign($data, 'RSA', $this->getPrivateKey());
-
         return $data;
     }
 

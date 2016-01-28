@@ -3,6 +3,7 @@
 namespace Omnipay\GlobalAlipay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\GlobalAlipay\Helper;
 
 class AppPurchaseResponse extends AbstractResponse
 {
@@ -44,11 +45,9 @@ class AppPurchaseResponse extends AbstractResponse
 
     public function getOrderString()
     {
-        $data = $this->request->getData();
-
-        $sign = $data['sign'];
-
         $query = $this->getOrderQuery($this->request->getData());
+
+        $sign = Helper::signWithRSA($query, $this->request->getPrivateKey());
 
         return sprintf('%s&sign="%s"&sign_type="RSA"', $query, urlencode($sign));
     }

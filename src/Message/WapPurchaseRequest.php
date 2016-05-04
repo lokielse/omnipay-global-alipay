@@ -41,20 +41,22 @@ class WapPurchaseRequest extends AbstractRequest
         }
 
         $data = array (
-            'service'        => 'create_forex_trade_wap',
-            'partner'        => $this->getPartner(),
-            '_input_charset' => $this->getInputCharset() ?: 'utf-8',//<>
-            'sign_type'      => $signType,
-            'notify_url'     => $this->getNotifyUrl(),//<>
-            'return_url'     => $this->getReturnUrl(),//<>
-            'out_trade_no'   => $this->getOutTradeNo(),
-            'currency'       => $this->getCurrency() ?: 'USD',
-            'subject'        => $this->getSubject(),
-            'total_fee'      => $this->getTotalFee(),//<>
-            'rmb_fee'        => $this->getRmbFee(),//<>
-            'supplier'       => $this->getSupplier(),//<>
-            'timeout_rule'   => $this->getTimeoutRule(),//<>
-            'body'           => $this->getBody(),//<>
+            'service'         => 'create_forex_trade_wap',
+            'partner'         => $this->getPartner(),
+            '_input_charset'  => $this->getInputCharset() ?: 'utf-8',//<>
+            'sign_type'       => $signType,
+            'notify_url'      => $this->getNotifyUrl(),//<>
+            'return_url'      => $this->getReturnUrl(),//<>
+            'out_trade_no'    => $this->getOutTradeNo(),
+            'currency'        => $this->getCurrency() ?: 'USD',
+            'subject'         => $this->getSubject(),
+            'total_fee'       => $this->getTotalFee(),//<>
+            'rmb_fee'         => $this->getRmbFee(),//<>
+            'supplier'        => $this->getSupplier(),//<>
+            'timeout_rule'    => $this->getTimeoutRule(),//<>
+            'body'            => $this->getBody(),//<>
+            'product_code'    => $this->getProductCode(),
+            'split_fund_info' => $this->getSplitFundInfo(),
         );
 
         $data = array_filter($data);
@@ -233,6 +235,30 @@ class WapPurchaseRequest extends AbstractRequest
     public function setSupplier($value)
     {
         return $this->setParameter('supplier', $value);
+    }
+
+
+    public function getProductCode()
+    {
+        return $this->getParameter('product_code');
+    }
+
+
+    public function setProductCode($value)
+    {
+        return $this->setParameter('product_code', $value);
+    }
+
+
+    public function getSplitFundInfo()
+    {
+        return $this->getParameter('split_fund_info');
+    }
+
+
+    public function setSplitFundInfo(array $value = array())
+    {
+        return $this->setParameter('split_fund_info', json_encode($value));
     }
 
 

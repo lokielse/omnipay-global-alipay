@@ -2,9 +2,9 @@
 
 namespace Omnipay\GlobalAlipay\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
-use Omnipay\GlobalAlipay\Helper;
 
 class AppPurchaseRequest extends AbstractRequest
 {
@@ -12,8 +12,8 @@ class AppPurchaseRequest extends AbstractRequest
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
-     *
      * @return mixed
+     * @throws InvalidRequestException
      */
     public function getData()
     {
@@ -22,9 +22,12 @@ class AppPurchaseRequest extends AbstractRequest
             'out_trade_no',
             'subject',
             'seller_id',
-            'total_fee',
             'body'
         );
+
+        if ( ! $this->parameters->get('total_fee', $this->parameters->get('rmb_fee'))) {
+            throw new InvalidRequestException("The `total_fee` or `rmb_fee` is required ");
+        }
 
         $data = array (
             'service'        => 'mobile.securitypay.pay',

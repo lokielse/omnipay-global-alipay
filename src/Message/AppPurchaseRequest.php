@@ -25,8 +25,12 @@ class AppPurchaseRequest extends AbstractRequest
             'body'
         );
 
-        if ( ! $this->parameters->get('total_fee', $this->parameters->get('rmb_fee'))) {
-            throw new InvalidRequestException("The `total_fee` or `rmb_fee` is required ");
+        if ($this->getTotalFee() && $this->getRmbFee()) {
+            throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' parameter can not be provide together");
+        }
+
+        if (! $this->getTotalFee() && ! $this->getRmbFee()) {
+            throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' must be provide one of them");
         }
 
         $data = array (

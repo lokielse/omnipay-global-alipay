@@ -54,6 +54,8 @@ class WebPurchaseRequest extends AbstractRequest
             'specified_pay_channel' => $this->getSpecifiedPayChannel(),//<>
             'seller_id'             => $this->getSellerId(),//<>
             'seller_name'           => $this->getSellerIndustry(),//<>
+            'split_fund_info'       => $this->getSplitFundInfo(),
+            'product_code'          => $this->getProductCode(),
         );
 
         $data = array_filter($data);
@@ -331,5 +333,29 @@ class WebPurchaseRequest extends AbstractRequest
     public function setEnvironment($value)
     {
         return $this->setParameter('environment', $value);
+    }
+
+
+    public function getSplitFundInfo()
+    {
+        return $this->getParameter('split_fund_info');
+    }
+
+
+    public function setSplitFundInfo(array $value = array())
+    {
+        return $this->setParameter('split_fund_info', json_encode($value));
+    }
+
+
+    public function getProductCode()
+    {
+        return $this->getParameter('product_code');
+    }
+
+
+    public function setProductCode($value)
+    {
+        return $this->setParameter('product_code', $value);
     }
 }

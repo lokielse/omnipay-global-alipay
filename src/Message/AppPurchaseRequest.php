@@ -33,7 +33,7 @@ class AppPurchaseRequest extends AbstractRequest
             throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' must be provide one of them");
         }
 
-        $data = array (
+        $data = array(
             'service'        => 'mobile.securitypay.pay',
             'partner'        => $this->getPartner(),
             '_input_charset' => $this->getInputCharset() ?: 'utf-8',//<>
@@ -70,7 +70,7 @@ class AppPurchaseRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $responseData = array ();
+        $responseData = array();
 
         return $this->response = new AppPurchaseResponse($this, $responseData);
     }

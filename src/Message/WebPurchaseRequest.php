@@ -34,7 +34,7 @@ class WebPurchaseRequest extends AbstractRequest
             throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' must be provide one of them");
         }
 
-        $data = array (
+        $data = array(
             'service'               => 'create_forex_trade',
             'partner'               => $this->getPartner(),
             'notify_url'            => $this->getNotifyUrl(),
@@ -75,7 +75,7 @@ class WebPurchaseRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $responseData = array ();
+        $responseData = array();
 
         return $this->response = new WebPurchaseResponse($this, $responseData);
     }

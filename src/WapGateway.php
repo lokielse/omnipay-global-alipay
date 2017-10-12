@@ -90,13 +90,13 @@ class WapGateway extends AbstractGateway
     }
 
 
-    public function purchase(array $parameters = array ())
+    public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\WapPurchaseRequest', $parameters);
     }
 
 
-    public function completePurchase(array $parameters = array ())
+    public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\CompletePurchaseRequest', $parameters);
     }

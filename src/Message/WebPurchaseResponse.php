@@ -7,7 +7,6 @@ use Omnipay\Common\Message\RedirectResponseInterface;
 
 class WebPurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
-
     protected $endpoint = 'https://mapi.alipay.com/gateway.do';
 
     protected $endpointSandbox = 'https://openapi.alipaydev.com/gateway.do';

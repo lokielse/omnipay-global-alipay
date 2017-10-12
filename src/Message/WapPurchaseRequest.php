@@ -40,7 +40,7 @@ class WapPurchaseRequest extends AbstractRequest
             throw new InvalidRequestException("The 'total_fee' and 'rmb_fee' must be provide one of them");
         }
 
-        $data = array (
+        $data = array(
             'service'         => 'create_forex_trade_wap',
             'partner'         => $this->getPartner(),
             '_input_charset'  => $this->getInputCharset() ?: 'utf-8',//<>
@@ -76,7 +76,7 @@ class WapPurchaseRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $responseData = array ();
+        $responseData = array();
 
         return $this->response = new WapPurchaseResponse($this, $responseData);
     }

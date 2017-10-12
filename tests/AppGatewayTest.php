@@ -27,13 +27,12 @@ class AppGatewayTest extends GatewayTestCase
         $this->gateway->setSellerId('foo@example.com');
         $this->gateway->setPrivateKey(__DIR__ . '/Assets/private_key.pem');
         $this->gateway->setNotifyUrl('http://example.com/notify');
-
     }
 
 
     public function testPurchase()
     {
-        $order = array (
+        $order = array(
             'subject'      => 'test', //Your title
             'out_trade_no' => date('YmdHis'), //Should be format 'YmdHis'
             'total_fee'    => '0.01', //Order Title
@@ -52,8 +51,8 @@ class AppGatewayTest extends GatewayTestCase
 
     public function testCompletePurchase()
     {
-        $options = array (
-            'request_params' => array (
+        $options = array(
+            'request_params' => array(
                 'out_trade_no' => '123456',
                 'sign'         => '123456',
                 'sign_type'    => 'RSA',

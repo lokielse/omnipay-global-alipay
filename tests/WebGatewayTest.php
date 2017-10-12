@@ -27,13 +27,12 @@ class WebGatewayTest extends GatewayTestCase
         $this->gateway->setKey('xxxxxxx');
         $this->gateway->setSignType('MD5');
         $this->gateway->setNotifyUrl('http://example.com/notify');
-
     }
 
 
     public function testPurchase()
     {
-        $order = array (
+        $order = array(
             'subject'      => 'test', //Your subject
             'out_trade_no' => date('YmdHis'), //trade no
             'total_fee'    => '0.01', //order fee
@@ -51,8 +50,8 @@ class WebGatewayTest extends GatewayTestCase
 
     public function testCompletePurchase()
     {
-        $options = array (
-            'request_params' => array (
+        $options = array(
+            'request_params' => array(
                 'out_trade_no' => '123456',
                 'sign'         => '123456',
                 'sign_type'    => 'MD5',

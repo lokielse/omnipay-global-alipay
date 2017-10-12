@@ -9,7 +9,6 @@ use Omnipay\GlobalAlipay\Helper;
 
 class CompletePurchaseRequest extends AbstractRequest
 {
-
     protected $endpoint = 'http://notify.alipay.com/trade/notify_query.do?';
 
     protected $endpointHttps = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
@@ -38,7 +37,7 @@ class CompletePurchaseRequest extends AbstractRequest
             $this->validate('private_key');
         }
 
-        $data = array (
+        $data = array(
             'request_params' => $this->getRequestParams()
         );
 
@@ -194,7 +193,7 @@ class CompletePurchaseRequest extends AbstractRequest
             $paid = false;
         }
 
-        $responseData = array (
+        $responseData = array(
             'sign_match'          => $signMatch,
             'notify_id_verify_ok' => $verifyOk,
             'paid'                => $paid,

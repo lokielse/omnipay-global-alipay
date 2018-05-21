@@ -5,9 +5,9 @@ namespace Omnipay\GlobalAlipay;
 use Omnipay\GlobalAlipay\Message\CompletePurchaseResponse;
 use Omnipay\GlobalAlipay\Message\WebPurchaseResponse;
 use Omnipay\Omnipay;
-use Omnipay\Tests\GatewayTestCase;
+use Omnipay\Tests\TestCase;
 
-class WebGatewayTest extends GatewayTestCase
+class WebGatewayTest extends TestCase
 {
 
     /**
@@ -32,11 +32,11 @@ class WebGatewayTest extends GatewayTestCase
 
     public function testPurchase()
     {
-        $order = array(
+        $order = [
             'subject'      => 'test', //Your subject
             'out_trade_no' => date('YmdHis'), //trade no
             'total_fee'    => '0.01', //order fee
-        );
+        ];
 
         /**
          * @var WebPurchaseResponse $response
@@ -50,13 +50,13 @@ class WebGatewayTest extends GatewayTestCase
 
     public function testCompletePurchase()
     {
-        $options = array(
-            'request_params' => array(
+        $options = [
+            'request_params' => [
                 'out_trade_no' => '123456',
                 'sign'         => '123456',
                 'sign_type'    => 'MD5',
-            ),
-        );
+            ],
+        ];
 
         /**
          * @var CompletePurchaseResponse $response

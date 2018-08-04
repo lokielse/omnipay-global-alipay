@@ -65,4 +65,16 @@ class AppGatewayTest extends TestCase
         $response = $this->gateway->completePurchase($options)->send();
         $this->assertFalse($response->isSuccessful());
     }
+
+    public function testQuery()
+    {
+        $options = [
+            'out_trade_no' => '123456',
+        ];
+        /**
+         * @var TradeQueryResponse $response
+         */
+        $response = $this->gateway->query($options)->send();
+        $this->assertFalse($response->isSuccessful());
+    }
 }

@@ -88,4 +88,9 @@ class AppGateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\CompletePurchaseRequest', $parameters);
     }
+
+    public function query(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\GlobalAlipay\Message\TradeQueryRequest', $parameters);
+    }
 }

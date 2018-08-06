@@ -201,6 +201,7 @@ class TradeRefundRequest extends AbstractRequest
     public function getReturnAmount()
     {
         return $this->getParameter('return_amount');
+
     }
 
 

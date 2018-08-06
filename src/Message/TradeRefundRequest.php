@@ -28,6 +28,14 @@ class TradeRefundRequest extends AbstractRequest
             'product_code'
         );
 
+        if ($this->getReturnAmount() && $this->getReturnRmbAmount()) {
+            throw new InvalidRequestException("The 'return_amount' and 'return_rmb_amount' parameter can not be provide together");
+        }
+
+        if (! $this->getReturnAmount() && ! $this->getReturnRmbAmount()) {
+            throw new InvalidRequestException("The 'return_amount' and 'return_rmb_amount' must be provide one of them");
+        }
+
         $data = [
             'service' =>  $this->service,
             'partner' => $this->getPartner(),

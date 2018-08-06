@@ -1,6 +1,9 @@
 <?php
+
 namespace Omnipay\GlobalAlipay\Message;
+
 use Omnipay\Common\Message\AbstractResponse;
+
 class TradeQueryResponse extends AbstractResponse
 {
     /**
@@ -8,11 +11,12 @@ class TradeQueryResponse extends AbstractResponse
      *
      * @return boolean
      */
-    public function isSuccessful()
+    public function isSuccessful ()
     {
         return $this->isPaid();
     }
-    public function isPaid()
+
+    public function isPaid ()
     {
         $data = $this->getData();
         return $data['paid'];

@@ -1,5 +1,5 @@
 {
-  "name": "lokielse/omnipay-global-alipay",
+  "name": "mantou/omnipay-global-alipay",
   "type": "library",
   "description": "Alipay global gateway for Omnipay payment processing library",
   "keywords": [
@@ -14,12 +14,12 @@
     "payment",
     "purchase"
   ],
-  "homepage": "https://github.com/lokielse/omnipay-global-alipay",
+  "homepage": "https://github.com/506400117/omnipay-global-alipay",
   "license": "MIT",
   "authors": [
     {
       "name": "Loki Else",
-      "email": "lokielse@gmail.com"
+      "email": "506400117@11.com"
     }
   ],
   "autoload": {

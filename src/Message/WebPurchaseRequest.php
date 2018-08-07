@@ -374,7 +374,6 @@ class WebPurchaseRequest extends AbstractRequest
     protected function sign ($params, $signType)
     {
         $signer = new Signer($params);
-        $signer->setIgnores(['sign']);
 
         $signType = strtoupper($signType);
 

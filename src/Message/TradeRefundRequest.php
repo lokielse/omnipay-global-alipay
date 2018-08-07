@@ -11,7 +11,8 @@ class TradeRefundRequest extends AbstractRequest
 {
     protected $endpoint = 'https://mapi.alipay.com/gateway.do';
 
-    protected $service= 'forex_refund';
+    protected $service = 'forex_refund';
+
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -32,12 +33,12 @@ class TradeRefundRequest extends AbstractRequest
             throw new InvalidRequestException("The 'return_amount' and 'return_rmb_amount' parameter can not be provide together");
         }
 
-        if (! $this->getReturnAmount() && ! $this->getReturnRmbAmount()) {
+        if (!$this->getReturnAmount() && !$this->getReturnRmbAmount()) {
             throw new InvalidRequestException("The 'return_amount' and 'return_rmb_amount' must be provide one of them");
         }
 
         $data = [
-            'service' =>  $this->service,
+            'service' => $this->service,
             'partner' => $this->getPartner(),
             'out_trade_no' => $this->getOutTradeNo(),
             '_input_charset' => $this->getInputCharset() ?: 'utf-8',
@@ -97,7 +98,7 @@ class TradeRefundRequest extends AbstractRequest
     /**
      * @return string
      */
-    protected function getRequestMethod()
+    protected function getRequestMethod ()
     {
         return 'POST';
     }
@@ -107,7 +108,7 @@ class TradeRefundRequest extends AbstractRequest
      *
      * @return string
      */
-    protected function getRequestUrl($data)
+    protected function getRequestUrl ($data)
     {
         $queryParams = $data;
 
@@ -123,7 +124,7 @@ class TradeRefundRequest extends AbstractRequest
     /**
      * @return mixed
      */
-    public function getEndpoint()
+    public function getEndpoint ()
     {
         return $this->endpoint;
     }
@@ -198,57 +199,57 @@ class TradeRefundRequest extends AbstractRequest
         return $this->getParameter('request_params');
     }
 
-    public function getReturnAmount()
+    public function getReturnAmount ()
     {
         return $this->getParameter('return_amount');
 
     }
 
 
-    public function setReturnAmount($value)
+    public function setReturnAmount ($value)
     {
         return $this->setParameter('return_amount', $value);
     }
 
 
-    public function getReturnRmbAmount()
+    public function getReturnRmbAmount ()
     {
         return $this->getParameter('return_rmb_amount');
     }
 
 
-    public function setReturnRmbAmount($value)
+    public function setReturnRmbAmount ($value)
     {
         return $this->setParameter('return_rmb_amount', $value);
     }
 
-    public function getIsSync()
+    public function getIsSync ()
     {
         return $this->getParameter('is_sync');
     }
 
-    public function setIsSync($value)
+    public function setIsSync ($value)
     {
-        return $this->setParameter('is_sync',$value);
+        return $this->setParameter('is_sync', $value);
     }
 
-    public function getOutReturnNo()
+    public function getOutReturnNo ()
     {
         return $this->getParameter('out_return_no');
     }
 
 
-    public function setOutReturnNo($value)
+    public function setOutReturnNo ($value)
     {
         return $this->setParameter('out_return_no', $value);
     }
 
-    public function getReason()
+    public function getReason ()
     {
         return $this->getParameter('reason');
     }
 
-    public function setReason($value)
+    public function setReason ($value)
     {
         return $this->setParameter('reason', $value);
     }
@@ -260,10 +261,10 @@ class TradeRefundRequest extends AbstractRequest
 
     public function setProductCode ($value)
     {
-        return $this->setParameter('product_code',$value);
+        return $this->setParameter('product_code', $value);
     }
 
-    public function validateParam()
+    public function validateParam ()
     {
         foreach (func_get_args() as $key) {
             $value = $this->getRequestParam($key);
@@ -273,25 +274,25 @@ class TradeRefundRequest extends AbstractRequest
         }
     }
 
-    protected function getRequestParam($key)
+    protected function getRequestParam ($key)
     {
         $params = $this->getRequestParams();
 
         return isset($params[$key]) ? $params[$key] : null;
     }
 
-    public function getTransport()
+    public function getTransport ()
     {
         return $this->getParameter('transport');
     }
 
 
-    public function setTransport($value)
+    public function setTransport ($value)
     {
         return $this->setParameter('transport', $value);
     }
 
-    protected function sign($params, $signType)
+    protected function sign ($params, $signType)
     {
         $signer = new Signer($params);
         $signer->setIgnores(['sign']);
@@ -309,7 +310,7 @@ class TradeRefundRequest extends AbstractRequest
         return $sign;
     }
 
-    protected function decode($data)
+    protected function decode ($data)
     {
         $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
         return json_decode(json_encode($postObj), true);

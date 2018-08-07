@@ -56,7 +56,7 @@ class WebPurchaseRequest extends AbstractRequest
             'seller_id'             => $this->getSellerId(),//<>
             'seller_name'           => $this->getSellerIndustry(),//<>
             'split_fund_info'       => $this->getSplitFundInfo(),
-            'product_code'          => $this->getProductCode(),
+            'product_code'          => $this->getProductCode() ?: 'NEW_OVERSEAS_SELLER',
         );
 
         $data = array_filter($data);

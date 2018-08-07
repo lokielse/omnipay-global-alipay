@@ -5,6 +5,7 @@ namespace Omnipay\GlobalAlipay\Message;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
+use Omnipay\GlobalAlipay\Common\Signer;
 use Omnipay\GlobalAlipay\Helper;
 
 class WebPurchaseRequest extends AbstractRequest
@@ -60,7 +61,7 @@ class WebPurchaseRequest extends AbstractRequest
 
         $data = array_filter($data);
 
-        $data['sign'] = Helper::sign($data, 'MD5', $this->getKey());
+        $data['sign'] = $this->sign($data, $data['sign_type']);
 
         return $data;
     }
@@ -92,6 +93,17 @@ class WebPurchaseRequest extends AbstractRequest
         return $this->setParameter('key', $value);
     }
 
+
+    public function getPrivateKey ()
+    {
+        return $this->getParameter('private_key');
+    }
+
+
+    public function setPrivateKey ($value)
+    {
+        return $this->setParameter('private_key', $value);
+    }
 
     public function getPartner()
     {
@@ -357,5 +369,25 @@ class WebPurchaseRequest extends AbstractRequest
     public function setProductCode($value)
     {
         return $this->setParameter('product_code', $value);
+    }
+
+    protected function sign ($params, $signType)
+    {
+        $signer = new Signer($params);
+        $signer->setIgnores(['sign']);
+
+        $signType = strtoupper($signType);
+
+        if ($signType == 'RSA') {
+            $sign = $signer->signWithRSA($this->getPrivateKey());
+        } elseif ($signType == 'RSA2') {
+            $sign = $signer->signWithRSA($this->getPrivateKey(), OPENSSL_ALGO_SHA256);
+        }elseif ($signType == 'MD5') {
+            $sign = $signer->signWithMD5($this->getKey());
+        } else {
+            throw new InvalidRequestException('The signType is invalid');
+        }
+
+        return $sign;
     }
 }

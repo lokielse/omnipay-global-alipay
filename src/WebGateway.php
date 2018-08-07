@@ -18,6 +18,18 @@ class WebGateway extends AbstractGateway
     }
 
 
+    public function setPrivateKey($value)
+    {
+        return $this->setParameter('private_key', $value);
+    }
+
+
+    public function getPrivateKey()
+    {
+        return $this->getParameter('private_key');
+    }
+
+
     public function getEnvironment()
     {
         return $this->getParameter('environment');

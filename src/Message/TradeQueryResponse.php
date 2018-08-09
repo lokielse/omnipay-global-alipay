@@ -28,7 +28,7 @@ class TradeQueryResponse extends AbstractResponse
     public function getAlipayResponse ($key = null)
     {
         if ($key) {
-            return array_get($this->data, $key);
+            return array_get($this->data, "$this->key.{$key}");
         } else {
             return array_get($this->data, $this->key);
         }

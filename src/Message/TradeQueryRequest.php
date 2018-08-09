@@ -11,6 +11,8 @@ class TradeQueryRequest extends AbstractRequest
 {
     protected $endpoint = 'https://mapi.alipay.com/gateway.do';
 
+    protected $endpointSandbox = 'https://openapi.alipaydev.com/gateway.do';
+
     protected $service = 'single_trade_query';
 
     /**
@@ -49,7 +51,7 @@ class TradeQueryRequest extends AbstractRequest
     public function sendData ($data)
     {
         $method = $this->getRequestMethod();
-        $url = $this->endpoint;
+        $url = $this->getEndpoint();
         $body = http_build_query($data);
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded'
@@ -104,7 +106,22 @@ class TradeQueryRequest extends AbstractRequest
      */
     public function getEndpoint ()
     {
-        return $this->endpoint;
+        if ($this->getEnvironment() == 'sandbox') {
+            return $this->endpointSandbox;
+        } else {
+            return $this->endpoint;
+        }
+    }
+
+    public function getEnvironment()
+    {
+        return $this->getParameter('environment');
+    }
+
+
+    public function setEnvironment($value)
+    {
+        return $this->setParameter('environment', $value);
     }
 
     public function getPrivateKey ()

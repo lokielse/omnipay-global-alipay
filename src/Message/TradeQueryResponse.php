@@ -7,7 +7,7 @@ use Omnipay\Common\Message\AbstractResponse;
 class TradeQueryResponse extends AbstractResponse
 {
 
-    protected $key;
+    protected $key = 'response.trade';
 
     /**
      * Is the response successful?
@@ -28,7 +28,7 @@ class TradeQueryResponse extends AbstractResponse
     public function getAlipayResponse ($key = null)
     {
         if ($key) {
-            return array_get($this->data, "{$this->key}.{$key}");
+            return array_get($this->data, $key);
         } else {
             return array_get($this->data, $this->key);
         }

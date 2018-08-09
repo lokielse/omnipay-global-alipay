@@ -148,6 +148,39 @@ class CompletePurchaseRequest extends AbstractRequest
         return isset($params[$key]) ? $params[$key] : null;
     }
 
+    public function setSignType($value)
+    {
+        $this->setParameter('sign_type', $value);
+    }
+
+
+    public function getSignType()
+    {
+        return $this->getParameter('sign_type');
+    }
+
+    public function setOutTradeNo($value)
+    {
+        $this->setParameter('out_trade_no', $value);
+    }
+
+
+    public function getOutTradeNo()
+    {
+        return $this->getParameter('out_trade_no');
+    }
+
+    public function setSign($value)
+    {
+        $this->setParameter('sign', $value);
+    }
+
+
+    public function getSign()
+    {
+        return $this->getParameter('sign');
+    }
+
 
     /**
      * Send the request with specified data

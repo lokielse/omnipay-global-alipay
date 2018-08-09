@@ -296,7 +296,7 @@ class CompletePurchaseRequest extends AbstractRequest
         $transport = strtolower($this->getTransport() ?: 'http');
 
         if ($this->getEnvironment() == 'sandbox') {
-            return $this->endpointSandbox . 'service=notify_verify&';
+            return $this->endpointSandbox . '?service=notify_verify&';
         } else {
             if (strtolower($transport) == 'http') {
                 return $this->endpoint;

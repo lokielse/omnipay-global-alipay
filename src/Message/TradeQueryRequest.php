@@ -64,7 +64,7 @@ class TradeQueryRequest extends AbstractRequest
         /**
          * is paid?
          */
-        if (isset($payload['trade_status']) && $payload['trade_status'] == 'TRADE_FINISHED') {
+        if (isset($payload['is_success']) && $payload['is_success'] == 'T' && array_get($payload,'response.trade.trade_status') == 'TRADE_FINISHED') {
             $paid = true;
         } else {
             $paid = false;

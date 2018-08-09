@@ -141,4 +141,15 @@ class WebGateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\TradeRefundRequest', $parameters);
     }
+
+    public function getCaCertPath()
+    {
+        return $this->getParameter('ca_cert_path');
+    }
+
+
+    public function setCaCertPath($value)
+    {
+        return $this->setParameter('ca_cert_path', $value);
+    }
 }

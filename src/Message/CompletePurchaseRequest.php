@@ -14,6 +14,8 @@ class CompletePurchaseRequest extends AbstractRequest
 
     protected $endpointHttps = 'https://mapi.alipay.com/gateway.do?service=notify_verify&';
 
+    protected $endpointSandbox = 'https://openapi.alipaydev.com/gateway.do';
+
 
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
@@ -293,10 +295,14 @@ class CompletePurchaseRequest extends AbstractRequest
     {
         $transport = strtolower($this->getTransport() ?: 'http');
 
-        if (strtolower($transport) == 'http') {
-            return $this->endpoint;
+        if ($this->getEnvironment() == 'sandbox') {
+            return $this->endpointSandbox . 'service=notify_verify&';
         } else {
-            return $this->endpointHttps;
+            if (strtolower($transport) == 'http') {
+                return $this->endpoint;
+            } else {
+                return $this->endpointHttps;
+            }
         }
     }
 

@@ -100,6 +100,7 @@ class CompletePurchaseRequest extends AbstractRequest
 
 
     public function setPartner($value)
+
     {
         return $this->setParameter('partner', $value);
     }

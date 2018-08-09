@@ -29,6 +29,25 @@ class AppGateway extends AbstractGateway
         return $this->getParameter('private_key');
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAlipayPublicKey()
+    {
+        return $this->getParameter('alipay_public_key');
+    }
+
+
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAlipayPublicKey($value)
+    {
+        return $this->setParameter('alipay_public_key', $value);
+    }
+
 
     public function getPartner()
     {

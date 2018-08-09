@@ -27,12 +27,13 @@ class TradeQueryRequest extends AbstractRequest
             'partner'
         );
 
-        $data['out_trade_no'] = $this->getOutTradeNo();
-
-        $data['service'] = $this->service;
-
-        $data['_input_charset'] = $this->getInputCharset() ?: 'utf-8';//<>
-        $data['sign_type'] = 'RSA';
+        $data = [
+            'out_trade_no' => $this->getOutTradeNo(),
+            'service' => $this->service,
+            '_input_charset' => $this->getInputCharset() ?: 'utf-8',
+            'sign_type' => 'RSA',
+            'partner' => $this->getPartner(),
+        ];
 
         ksort($data);
 

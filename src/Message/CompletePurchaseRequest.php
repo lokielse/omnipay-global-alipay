@@ -5,6 +5,7 @@ namespace Omnipay\GlobalAlipay\Message;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\ResponseInterface;
+use Omnipay\GlobalAlipay\Common\Signer;
 use Omnipay\GlobalAlipay\Helper;
 
 class CompletePurchaseRequest extends AbstractRequest
@@ -161,17 +162,16 @@ class CompletePurchaseRequest extends AbstractRequest
 
         $signType = strtoupper($this->getRequestParam('sign_type'));
 
-        $sign = Helper::sign($data, $signType, $this->getSignKey($signType));
+        $sign =  $this->getRequestParam('sign');
 
         $notifyId = $this->getRequestParam('notify_id');
+        $signer = new Signer($data);
+        $content = $signer->getContentToSign();
 
-        /**
-         * is sign match?
-         */
-        if (isset($data['sign']) && $data['sign'] && $sign === $data['sign']) {
-            $signMatch = true;
+        if ($signType == 'RSA') {
+            $signMatch = (new Signer)->verifyWithRSA($content, $sign, $this->getAlipayPublicKey());
         } else {
-            $signMatch = false;
+            $signMatch = (new Signer)->verifyWithMD5($content, $sign, $this->getKey());
         }
 
         /**
@@ -183,6 +183,20 @@ class CompletePurchaseRequest extends AbstractRequest
         } else {
             $verifyOk = true;
         }
+
+        $request = new TradeQueryRequest($this->httpClient, $this->httpRequest);
+        $request->initialize($this->getParameters());
+        $request->setOutTradeNo($this->getRequestParam('out_trade_no'));
+        $request->setPrivateKey($this->getPrivateKey());
+
+        /**
+         * @var TradeQueryResponse $response
+         */
+        $response = $request->send();
+
+        $tradeStatus = $response->getAlipayResponse('trade_status');
+
+        $data['trade_status'] = $tradeStatus;
 
         /**
          * is paid?
@@ -265,5 +279,13 @@ class CompletePurchaseRequest extends AbstractRequest
         } else {
             return $this->getPrivateKey();
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAlipayPublicKey()
+    {
+        return $this->getParameter('alipay_public_key');
     }
 }

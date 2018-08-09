@@ -117,6 +117,16 @@ class TradeQueryRequest extends AbstractRequest
         return $this->setParameter('private_key', $value);
     }
 
+    public function getKey ()
+    {
+        return $this->getParameter('key');
+    }
+
+    public function setKey ($value)
+    {
+        return $this->setParameter('key', $value);
+    }
+
     public function getPartner ()
     {
         return $this->getParameter('partner');
@@ -243,8 +253,8 @@ class TradeQueryRequest extends AbstractRequest
 
         if ($signType == 'RSA') {
             $sign = $signer->signWithRSA($this->getPrivateKey());
-        } elseif ($signType == 'RSA2') {
-            $sign = $signer->signWithRSA($this->getPrivateKey(), OPENSSL_ALGO_SHA256);
+        } elseif ($signType == 'MD5') {
+            $sign = $signer->signWithMD5($this->getkey());
         } else {
             throw new InvalidRequestException('The signType is invalid');
         }

@@ -6,7 +6,6 @@ use Omnipay\Common\Message\AbstractResponse;
 
 class TradeQueryResponse extends AbstractResponse
 {
-
     protected $key = 'response.trade';
 
     /**
@@ -25,7 +24,7 @@ class TradeQueryResponse extends AbstractResponse
         return $data['paid'];
     }
 
-    public function getAlipayResponse ($key = null)
+    public function getAlipayResponse($key = null)
     {
         if ($key) {
             return array_get($this->data, "$this->key.{$key}");

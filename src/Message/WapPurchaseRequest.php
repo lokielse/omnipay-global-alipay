@@ -52,6 +52,7 @@ class WapPurchaseRequest extends AbstractRequest
             'subject'         => $this->getSubject(),
             'total_fee'       => $this->getTotalFee(),//<>
             'rmb_fee'         => $this->getRmbFee(),//<>
+            'app_pay'         => $this->getAppPay(),//<>
             'supplier'        => $this->getSupplier(),//<>
             'timeout_rule'    => $this->getTimeoutRule(),//<>
             'body'            => $this->getBody(),//<>
@@ -223,6 +224,17 @@ class WapPurchaseRequest extends AbstractRequest
     public function setRmbFee($value)
     {
         return $this->setParameter('rmb_fee', $value);
+    }
+
+
+    public function getAppPay()
+    {
+        return $this->getParameter('app_pay');
+    }
+
+    public function setAppPay($value)
+    {
+        return $this->setParameter('app_pay', $value);
     }
 
 

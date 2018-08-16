@@ -65,7 +65,7 @@ class TradeQueryRequest extends AbstractRequest
         /**
          * is paid?
          */
-        if (isset($payload['is_success']) && $payload['is_success'] == 'T' && array_get($payload,'response.trade.trade_status') == 'TRADE_FINISHED') {
+        if (isset($payload['is_success']) && $payload['is_success'] == 'T' && array_get($payload, 'response.trade.trade_status') == 'TRADE_FINISHED') {
             $paid = true;
         } else {
             $paid = false;
@@ -79,7 +79,7 @@ class TradeQueryRequest extends AbstractRequest
     /**
      * @return string
      */
-    protected function getRequestMethod ()
+    protected function getRequestMethod()
     {
         return 'POST';
     }
@@ -89,7 +89,7 @@ class TradeQueryRequest extends AbstractRequest
      *
      * @return string
      */
-    protected function getRequestUrl ($data)
+    protected function getRequestUrl($data)
     {
         $queryParams = $data;
 
@@ -105,7 +105,7 @@ class TradeQueryRequest extends AbstractRequest
     /**
      * @return mixed
      */
-    public function getEndpoint ()
+    public function getEndpoint()
     {
         if ($this->getEnvironment() == 'sandbox') {
             return $this->endpointSandbox;
@@ -135,12 +135,12 @@ class TradeQueryRequest extends AbstractRequest
         return $this->setParameter('private_key', $value);
     }
 
-    public function getKey ()
+    public function getKey()
     {
         return $this->getParameter('key');
     }
 
-    public function setKey ($value)
+    public function setKey($value)
     {
         return $this->setParameter('key', $value);
     }
@@ -235,7 +235,7 @@ class TradeQueryRequest extends AbstractRequest
         return $this->getParameter('request_params');
     }
 
-    public function validateParam ()
+    public function validateParam()
     {
         foreach (func_get_args() as $key) {
             $value = $this->getRequestParam($key);
@@ -245,25 +245,25 @@ class TradeQueryRequest extends AbstractRequest
         }
     }
 
-    protected function getRequestParam ($key)
+    protected function getRequestParam($key)
     {
         $params = $this->getRequestParams();
 
         return isset($params[$key]) ? $params[$key] : null;
     }
 
-    public function getTransport ()
+    public function getTransport()
     {
         return $this->getParameter('transport');
     }
 
 
-    public function setTransport ($value)
+    public function setTransport($value)
     {
         return $this->setParameter('transport', $value);
     }
 
-    protected function sign ($params, $signType)
+    protected function sign($params, $signType)
     {
         $signer = new Signer($params);
 
@@ -280,7 +280,7 @@ class TradeQueryRequest extends AbstractRequest
         return $sign;
     }
 
-    protected function decode ($data)
+    protected function decode($data)
     {
         $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
         return json_decode(json_encode($postObj), true);

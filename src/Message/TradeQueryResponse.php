@@ -14,12 +14,12 @@ class TradeQueryResponse extends AbstractResponse
      *
      * @return boolean
      */
-    public function isSuccessful ()
+    public function isSuccessful()
     {
         return $this->isPaid();
     }
 
-    public function isPaid ()
+    public function isPaid()
     {
         $data = $this->getData();
         return $data['paid'];

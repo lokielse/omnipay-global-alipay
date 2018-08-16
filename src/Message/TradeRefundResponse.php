@@ -4,31 +4,30 @@ namespace Omnipay\GlobalAlipay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 
-class TradeQueryResponse extends AbstractResponse
+class TradeRefundResponse extends AbstractResponse
 {
-
-    protected $key = 'response.trade';
+    protected $key;
 
     /**
      * Is the response successful?
      *
      * @return boolean
      */
-    public function isSuccessful()
+    public function isSuccessful ()
     {
-        return $this->isPaid();
+        return $this->isRefunded();
     }
 
-    public function isPaid()
+    public function isRefunded ()
     {
         $data = $this->getData();
-        return $data['paid'];
+        return $data['refunded'];
     }
 
     public function getAlipayResponse ($key = null)
     {
         if ($key) {
-            return array_get($this->data, "$this->key.{$key}");
+            return array_get($this->data, "{$this->key}.{$key}");
         } else {
             return array_get($this->data, $this->key);
         }

@@ -29,6 +29,25 @@ class AppGateway extends AbstractGateway
         return $this->getParameter('private_key');
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAlipayPublicKey()
+    {
+        return $this->getParameter('alipay_public_key');
+    }
+
+
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAlipayPublicKey($value)
+    {
+        return $this->setParameter('alipay_public_key', $value);
+    }
+
 
     public function getPartner()
     {
@@ -92,5 +111,21 @@ class AppGateway extends AbstractGateway
     public function query(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\TradeQueryRequest', $parameters);
+    }
+
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\GlobalAlipay\Message\TradeRefundRequest', $parameters);
+    }
+
+    public function getCaCertPath()
+    {
+        return $this->getParameter('ca_cert_path');
+    }
+
+
+    public function setCaCertPath($value)
+    {
+        return $this->setParameter('ca_cert_path', $value);
     }
 }

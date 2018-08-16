@@ -11,7 +11,10 @@ class TradeQueryRequest extends AbstractRequest
 {
     protected $endpoint = 'https://mapi.alipay.com/gateway.do';
 
-    protected $service= 'single_trade_query';
+    protected $endpointSandbox = 'https://openapi.alipaydev.com/gateway.do';
+
+    protected $service = 'single_trade_query';
+
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -24,12 +27,13 @@ class TradeQueryRequest extends AbstractRequest
             'partner'
         );
 
-        $data['out_trade_no'] = $this->getOutTradeNo();
-
-        $data['service'] = $this->service;
-
-        $data['_input_charset'] = $this->getInputCharset() ?: 'utf-8';//<>
-        $data['sign_type'] = 'RSA';
+        $data = [
+            'out_trade_no' => $this->getOutTradeNo(),
+            'service' => $this->service,
+            '_input_charset' => $this->getInputCharset() ?: 'utf-8',
+            'sign_type' => 'RSA',
+            'partner' => $this->getPartner(),
+        ];
 
         ksort($data);
 
@@ -48,7 +52,7 @@ class TradeQueryRequest extends AbstractRequest
     public function sendData($data)
     {
         $method = $this->getRequestMethod();
-        $url = $this->endpoint;
+        $url = $this->getEndpoint();
         $body = http_build_query($data);
         $headers = [
             'Content-Type' => 'application/x-www-form-urlencoded'
@@ -61,7 +65,7 @@ class TradeQueryRequest extends AbstractRequest
         /**
          * is paid?
          */
-        if (isset($payload['trade_status']) && $payload['trade_status'] == 'TRADE_FINISHED') {
+        if (isset($payload['is_success']) && $payload['is_success'] == 'T' && array_get($payload,'response.trade.trade_status') == 'TRADE_FINISHED') {
             $paid = true;
         } else {
             $paid = false;
@@ -75,7 +79,7 @@ class TradeQueryRequest extends AbstractRequest
     /**
      * @return string
      */
-    protected function getRequestMethod()
+    protected function getRequestMethod ()
     {
         return 'POST';
     }
@@ -85,7 +89,7 @@ class TradeQueryRequest extends AbstractRequest
      *
      * @return string
      */
-    protected function getRequestUrl($data)
+    protected function getRequestUrl ($data)
     {
         $queryParams = $data;
 
@@ -101,9 +105,24 @@ class TradeQueryRequest extends AbstractRequest
     /**
      * @return mixed
      */
-    public function getEndpoint()
+    public function getEndpoint ()
     {
-        return $this->endpoint;
+        if ($this->getEnvironment() == 'sandbox') {
+            return $this->endpointSandbox;
+        } else {
+            return $this->endpoint;
+        }
+    }
+
+    public function getEnvironment()
+    {
+        return $this->getParameter('environment');
+    }
+
+
+    public function setEnvironment($value)
+    {
+        return $this->setParameter('environment', $value);
     }
 
     public function getPrivateKey()
@@ -116,6 +135,16 @@ class TradeQueryRequest extends AbstractRequest
         return $this->setParameter('private_key', $value);
     }
 
+    public function getKey ()
+    {
+        return $this->getParameter('key');
+    }
+
+    public function setKey ($value)
+    {
+        return $this->setParameter('key', $value);
+    }
+  
     public function getPartner()
     {
         return $this->getParameter('partner');
@@ -206,7 +235,7 @@ class TradeQueryRequest extends AbstractRequest
         return $this->getParameter('request_params');
     }
 
-    public function validateParam()
+    public function validateParam ()
     {
         foreach (func_get_args() as $key) {
             $value = $this->getRequestParam($key);
@@ -216,35 +245,34 @@ class TradeQueryRequest extends AbstractRequest
         }
     }
 
-    protected function getRequestParam($key)
+    protected function getRequestParam ($key)
     {
         $params = $this->getRequestParams();
 
         return isset($params[$key]) ? $params[$key] : null;
     }
 
-    public function getTransport()
+    public function getTransport ()
     {
         return $this->getParameter('transport');
     }
 
 
-    public function setTransport($value)
+    public function setTransport ($value)
     {
         return $this->setParameter('transport', $value);
     }
 
-    protected function sign($params, $signType)
+    protected function sign ($params, $signType)
     {
         $signer = new Signer($params);
-        $signer->setIgnores(['sign']);
 
         $signType = strtoupper($signType);
 
         if ($signType == 'RSA') {
             $sign = $signer->signWithRSA($this->getPrivateKey());
-        } elseif ($signType == 'RSA2') {
-            $sign = $signer->signWithRSA($this->getPrivateKey(), OPENSSL_ALGO_SHA256);
+        } elseif ($signType == 'MD5') {
+            $sign = $signer->signWithMD5($this->getkey());
         } else {
             throw new InvalidRequestException('The signType is invalid');
         }
@@ -252,7 +280,7 @@ class TradeQueryRequest extends AbstractRequest
         return $sign;
     }
 
-    protected function decode($data)
+    protected function decode ($data)
     {
         $postObj = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
         return json_decode(json_encode($postObj), true);

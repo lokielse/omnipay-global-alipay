@@ -18,6 +18,37 @@ class WebGateway extends AbstractGateway
     }
 
 
+    public function setPrivateKey($value)
+    {
+        return $this->setParameter('private_key', $value);
+    }
+
+
+    public function getPrivateKey()
+    {
+        return $this->getParameter('private_key');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAlipayPublicKey()
+    {
+        return $this->getParameter('alipay_public_key');
+    }
+
+
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAlipayPublicKey($value)
+    {
+        return $this->setParameter('alipay_public_key', $value);
+    }
+
+
     public function getEnvironment()
     {
         return $this->getParameter('environment');
@@ -99,5 +130,26 @@ class WebGateway extends AbstractGateway
     public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\CompletePurchaseRequest', $parameters);
+    }
+
+    public function query(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\GlobalAlipay\Message\TradeQueryRequest', $parameters);
+    }
+
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\GlobalAlipay\Message\TradeRefundRequest', $parameters);
+    }
+
+    public function getCaCertPath()
+    {
+        return $this->getParameter('ca_cert_path');
+    }
+
+
+    public function setCaCertPath($value)
+    {
+        return $this->setParameter('ca_cert_path', $value);
     }
 }

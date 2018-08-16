@@ -94,13 +94,13 @@ class WebPurchaseRequest extends AbstractRequest
     }
 
 
-    public function getPrivateKey ()
+    public function getPrivateKey()
     {
         return $this->getParameter('private_key');
     }
 
 
-    public function setPrivateKey ($value)
+    public function setPrivateKey($value)
     {
         return $this->setParameter('private_key', $value);
     }
@@ -371,7 +371,7 @@ class WebPurchaseRequest extends AbstractRequest
         return $this->setParameter('product_code', $value);
     }
 
-    protected function sign ($params, $signType)
+    protected function sign($params, $signType)
     {
         $signer = new Signer($params);
 
@@ -381,7 +381,7 @@ class WebPurchaseRequest extends AbstractRequest
             $sign = $signer->signWithRSA($this->getPrivateKey());
         } elseif ($signType == 'RSA2') {
             $sign = $signer->signWithRSA($this->getPrivateKey(), OPENSSL_ALGO_SHA256);
-        }elseif ($signType == 'MD5') {
+        } elseif ($signType == 'MD5') {
             $sign = $signer->signWithMD5($this->getKey());
         } else {
             throw new InvalidRequestException('The signType is invalid');

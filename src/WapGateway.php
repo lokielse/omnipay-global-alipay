@@ -90,13 +90,45 @@ class WapGateway extends AbstractGateway
     }
 
 
-    public function purchase(array $parameters = array())
+    public function setPrivateKey($value)
+    {
+        return $this->setParameter('private_key', $value);
+    }
+
+
+    public function getPrivateKey()
+    {
+        return $this->getParameter('private_key');
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getAlipayPublicKey()
+    {
+        return $this->getParameter('alipay_public_key');
+    }
+
+
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setAlipayPublicKey($value)
+    {
+        return $this->setParameter('alipay_public_key', $value);
+    }
+
+
+    public function purchase(array $parameters = [])
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\WapPurchaseRequest', $parameters);
     }
 
 
-    public function completePurchase(array $parameters = array())
+    public function completePurchase(array $parameters = [])
     {
         return $this->createRequest('\Omnipay\GlobalAlipay\Message\CompletePurchaseRequest', $parameters);
     }

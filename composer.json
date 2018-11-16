@@ -1,38 +1,40 @@
 {
-  "name": "lokielse/omnipay-global-alipay",
-  "type": "library",
-  "description": "Alipay global gateway for Omnipay payment processing library",
-  "keywords": [
-    "alipay",
-    "gateway",
-    "global",
-    "cross-border",
-    "international",
-    "merchant",
-    "omnipay",
-    "pay",
-    "payment",
-    "purchase"
-  ],
-  "homepage": "https://github.com/lokielse/omnipay-global-alipay",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Loki Else",
-      "email": "lokielse@gmail.com"
+    "name": "lokielse/omnipay-global-alipay",
+    "type": "library",
+    "description": "Alipay global gateway for Omnipay payment processing library",
+    "keywords": [
+        "alipay",
+        "gateway",
+        "global",
+        "cross-border",
+        "international",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment",
+        "purchase"
+    ],
+    "homepage": "https://github.com/lokielse/omnipay-global-alipay",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Loki Else",
+            "email": "lokielse@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Omnipay\\GlobalAlipay\\": "src/"
+        },
+        "files": [
+            "src/Common/helpers.php"
+        ]
+    },
+    "require": {
+        "omnipay/common": "^3.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "^3.0",
+        "squizlabs/php_codesniffer": "3.*"
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Omnipay\\GlobalAlipay\\": "src/"
-    }
-  },
-  "require": {
-    "omnipay/common": "^3.0",
-    "php-http/guzzle6-adapter": "*"
-  },
-  "require-dev": {
-    "omnipay/tests": "^3.0",
-    "squizlabs/php_codesniffer": "3.*"
-  }
 }

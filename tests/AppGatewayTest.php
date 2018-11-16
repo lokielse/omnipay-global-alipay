@@ -26,6 +26,7 @@ class AppGatewayTest extends TestCase
         $this->gateway->setPartner('123456');
         $this->gateway->setSellerId('foo@example.com');
         $this->gateway->setPrivateKey(__DIR__ . '/Assets/private_key.pem');
+        $this->gateway->setAlipayPublicKey(__DIR__ . '/Assets/alipay_public_key.pem');
         $this->gateway->setNotifyUrl('http://example.com/notify');
     }
 

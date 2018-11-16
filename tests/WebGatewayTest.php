@@ -26,6 +26,8 @@ class WebGatewayTest extends TestCase
         $this->gateway->setPartner('123456');
         $this->gateway->setKey('xxxxxxx');
         $this->gateway->setSignType('MD5');
+        $this->gateway->setPrivateKey(__DIR__ . '/Assets/private_key.pem');
+        $this->gateway->setAlipayPublicKey(__DIR__ . '/Assets/alipay_public_key.pem');
         $this->gateway->setNotifyUrl('http://example.com/notify');
     }
 

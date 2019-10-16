@@ -24,20 +24,21 @@ class TradeQueryRequest extends AbstractRequest
     public function getData()
     {
         $this->validate(
-            'partner'
+            'partner',
+            'sign_type'
         );
 
         $data = [
             'out_trade_no' => $this->getOutTradeNo(),
             'service' => $this->service,
             '_input_charset' => $this->getInputCharset() ?: 'utf-8',
-            'sign_type' => 'RSA',
+            'sign_type' => $this->getSignType(),
             'partner' => $this->getPartner(),
         ];
 
         ksort($data);
 
-        $data['sign'] = $this->sign($data, 'RSA');
+        $data['sign'] = $this->sign($data, $this->getSignType());
 
         return $data;
     }
@@ -123,6 +124,16 @@ class TradeQueryRequest extends AbstractRequest
     public function setEnvironment($value)
     {
         return $this->setParameter('environment', $value);
+    }
+
+    public function getSignType()
+    {
+        return $this->getParameter('sign_type');
+    }
+
+    public function setSignType($value)
+    {
+        return $this->setParameter('sign_type', $value);
     }
 
     public function getPrivateKey()

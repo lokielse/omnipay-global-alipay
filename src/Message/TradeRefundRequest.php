@@ -46,7 +46,6 @@ class TradeRefundRequest extends AbstractRequest
             '_input_charset' => $this->getInputCharset() ?: 'utf-8',
             'sign_type' => 'RSA',
             'is_sync' => $this->getIsSync() ?: 'Y', //default sync
-            'notify_url' => $this->getNotifyUrl(), //when is_sync=N used
             'out_return_no' => $this->getOutReturnNo(),
             'return_amount' => $this->getReturnAmount(),
             'return_rmb_amount' => $this->getReturnRmbAmount(),
